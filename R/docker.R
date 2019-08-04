@@ -21,6 +21,7 @@ docker_deploy <- function(image, system_deps = c(), working_dir = getwd()) {
 		"libssl-dev",
 		"locales",
 		"ca-certificates",
+		"wget",
 		sapply(r_deps, function(d) paste0(d, "=", r_version_str, "-*")),
 		system_deps
 	)
