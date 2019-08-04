@@ -9,7 +9,8 @@
 #' @export
 #'
 #' @examples
-docker_deploy <- function(image, system_deps = c(), working_dir = getwd()) {
+docker_deploy <- function(image, system_deps = c(), working_dir = getwd(),
+	packrat_install_method = c("cran", "github")) {
 	r_version <- R.Version()
 	r_version_str <- paste0(r_version$major, ".", r_version$minor)
 
@@ -37,6 +38,8 @@ docker_deploy <- function(image, system_deps = c(), working_dir = getwd()) {
 	using_packrat <- file.exists(packrat_lockfile)
 
 	if (using_packrat) {
+		install_method <- match.arg(packrat_install_method)
+
 		target_packrat_dir <- file.path(context_dir, "packrat")
 		src_packrat_dir <- file.path(working_dir, "packrat")
 
@@ -47,8 +50,13 @@ docker_deploy <- function(image, system_deps = c(), working_dir = getwd()) {
 			"COPY packrat packrat"
 		)
 
+		packrat_setup <- switch (install_method,
+			cran = c("install.packages('packrat')"),
+			github = c("install.packages('remotes')", "remotes::install_github('rstudio/packrat')")
+		)
+
 		bootstrap_operations <- c(
-			"install.packages('packrat')",
+			packrat_setup,
 			"packrat::restore()",
 			"packrat::packify()"
 		)
