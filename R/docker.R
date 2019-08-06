@@ -20,7 +20,6 @@ docker_deploy <- function(image, system_deps = c(), working_dir = getwd()) {
 		"libxml2-dev",
 		"libssl-dev",
 		"locales",
-		"ca-certificates",
 		"wget",
 		sapply(r_deps, function(d) paste0(d, "=", r_version_str, "-*")),
 		system_deps
@@ -85,9 +84,6 @@ docker_deploy <- function(image, system_deps = c(), working_dir = getwd()) {
 			"echo \"en_US.UTF-8 UTF8\" >> /etc/locale.gen",
 			"locale-gen en_US.utf8",
 			"/usr/sbin/update-locale LANG=en_US.UTF-8"
-		),
-		bash_seq(
-			"update-ca-certificates"
 		),
 		"ENV LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8",
 		docker_operations,
