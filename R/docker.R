@@ -90,6 +90,14 @@ docker_deploy <- function(image, system_deps = c(), working_dir = getwd()) {
 		rscript(paste(bootstrap_operations, collapse = "; "))
 	)
 
+	if (file.exists(file.path(working_dir, "DESCRIPTION"))) {
+		lines <- c(lines,
+			"COPY DESCRIPTION NAMESPACE .Rbuildignore ./",
+			"COPY R R",
+			bash_seq("R CMD INSTALL .")
+		)
+	}
+
 	writeLines(lines, con = file.path(context_dir, "Dockerfile"))
 
 	build_status <- system(paste0("docker build -t ", image,  " ", context_dir))
