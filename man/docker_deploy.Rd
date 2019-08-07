@@ -4,7 +4,8 @@
 \alias{docker_deploy}
 \title{Title}
 \usage{
-docker_deploy(image, system_deps = c(), working_dir = getwd())
+docker_deploy(image, system_deps = c(), working_dir = getwd(),
+  extra_steps = c())
 }
 \arguments{
 \item{working_dir}{}

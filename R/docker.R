@@ -4,12 +4,13 @@
 #' @param image
 #' @param system_deps
 #' @param working_dir
+#' @param extra_steps
 #'
 #' @return
 #' @export
 #'
 #' @examples
-docker_deploy <- function(image, system_deps = c(), working_dir = getwd()) {
+docker_deploy <- function(image, system_deps = c(), working_dir = getwd(), extra_steps = c()) {
 	r_version <- R.Version()
 	r_version_str <- paste0(r_version$major, ".", r_version$minor)
 
@@ -101,6 +102,8 @@ docker_deploy <- function(image, system_deps = c(), working_dir = getwd()) {
 			bash_seq("R CMD INSTALL .")
 		)
 	}
+
+	lines <- c(lines, extra_steps)
 
 	writeLines(lines, con = file.path(context_dir, "Dockerfile"))
 
