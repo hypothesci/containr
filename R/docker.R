@@ -86,6 +86,7 @@ docker_deploy <- function(image, system_deps = c(), working_dir = getwd()) {
 			"/usr/sbin/update-locale LANG=en_US.UTF-8"
 		),
 		"ENV LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8",
+		"WORKDIR /containr",
 		docker_operations,
 		rscript(paste(bootstrap_operations, collapse = "; "))
 	)
