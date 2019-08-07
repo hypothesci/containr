@@ -92,6 +92,9 @@ docker_deploy <- function(image, system_deps = c(), working_dir = getwd()) {
 	)
 
 	if (file.exists(file.path(working_dir, "DESCRIPTION"))) {
+		package_contents <- sapply(c("DESCRIPTION", "NAMESPACE", ".Rbuildignore", "R"), function(f) file.path(working_dir, f))
+		file.copy(package_contents, context_dir, recursive = T)
+
 		lines <- c(lines,
 			"COPY DESCRIPTION NAMESPACE .Rbuildignore ./",
 			"COPY R R",
